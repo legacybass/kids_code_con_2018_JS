@@ -26,10 +26,10 @@ function preload() {
 
 function create() {
 	// Create world bounds
-	const backgroundImage = this.add.tileSprite(0, 0, 800, 600, 'background');
-	this.physics.setBoundsToWorld();
+	// const backgroundImage = this.add.tileSprite(0, 0, 800, 600, 'background');
+	// this.physics.setBoundsToWorld();
 
-	player = this.add.sprite(400, 300, 'player');
+	// player = this.add.sprite(400, 300, 'player');
 }
 
 function update() {
