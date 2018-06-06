@@ -1,8 +1,7 @@
 {
   "name": "kids-code-con-2018-complete",
   "version": "1.0.0",
-  "description":
-    "This is the complete, working version of the Kids Code Con 2018 JavaScript project.",
+  "description": "This is the complete, working version of the Kids Code Con 2018 JavaScript project.",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
