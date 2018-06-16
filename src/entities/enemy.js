@@ -39,10 +39,14 @@ export class StrafingEnemy extends Phaser.GameObjects.Image {
 
 		this.y += 1;
 
-		if(this.x <= 0)
+		if(this.x <= 0) {
 			this.direction = 'right';
-		else if(this.x >= this.scene.cache.game.config.width)
+			this.x = 0;
+		}
+		else if(this.x >= this.scene.cache.game.config.width) {
 			this.direction = 'left';
+			this.x = this.scene.cache.game.config.width;
+		}
 	}
 }
 

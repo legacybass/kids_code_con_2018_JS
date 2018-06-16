@@ -20,7 +20,6 @@ export default class Level1 extends Scene {
 
 		this.staticBackground = null;
 		this.scrollingBackground = null;
-		this.track = null;
 		this.player = null;
 		this.level1Enemies = null;
 		this.boss = null;
@@ -29,21 +28,28 @@ export default class Level1 extends Scene {
 		this.emitter = null;
 
 		this.cursors = null;
+		this.game = null;
 
 		this.level1EnemyCount = 50;
 		this.level2EnemyCount = 25;
 
 		this.lastLevel1Spawn = 0;
 		this.lastLevel2Spawn = 50;
+
+		this.sounds = {
+			theme: null,
+			playerHit: null
+		};
 	}
 
 	create() {
+		this.game = this.scene.get('preloader');
+		
 		this.staticBackground = this.add.image(0, 0, 'background');
 		this.staticBackground.setTint(0x333333);
 		this.staticBackground.setOrigin(0.5);
 
 		this.sound.pauseOnBlur = true;
-		this.track = this.sound.add('level1theme');
 		
 		this.level1Enemies = this.physics.add.group({
 			classType: SimpleEnemy,
@@ -113,11 +119,20 @@ export default class Level1 extends Scene {
 		this.player.setActive(true).setVisible(true);
 		this.player.setCollideWorldBounds(true);
 
+		this.physics.add.overlap(this.player, this.level1Enemies, this.playerCollideWithEnemy, this.playerCollideWithEnemy, this);
+		this.physics.add.overlap(this.player, this.level2Enemies, this.playerCollideWithEnemy, this.playerCollideWithEnemy, this);
+
 		this.cursors = this.cache.game.input.keyboard.createCursorKeys();
 
-		this.track.loop = true;
-		this.track.volume = 0.2;
-		this.track.play();
+		this.sounds.theme = this.sound.add('level1theme');
+		this.sounds.theme.loop = true;
+		this.sounds.theme.volume = 0.2;
+		this.sounds.theme.play();
+		this.sounds.playerHit = this.sound.add('playerHit');
+		this.sounds.playerHit.loop = false;
+		this.sounds.playerHit.volume = 0.5;
+
+		this.registry.events.on('changedata', this.updateData, this);
 	}
 
 	update() {
@@ -194,6 +209,19 @@ export default class Level1 extends Scene {
 	}
 
 	playerCollideWithEnemy (player, enemy) {
+		if(!this.player.invincible) {
+			this.cameras.main.shake(100, 0.01, 0.01);
+			this.sounds.playerHit.play();
+			this.player.invincible = true;
+			this.time.addEvent({
+				delay: 1500,
+				loop: false,
+				callback: () => { this.player.invincible = false; }
+			})
+		}
+	}
 
+	updateData(parent, key, value) {
+		
 	}
 }
